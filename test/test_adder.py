@@ -67,7 +67,8 @@ async def scan_read(dut):
     value = 0
     for _ in range(6):
         drive(dut, select_dft=1, test_mode=1, scan_enable=1, scan_in=0)
-        scan_out = (int(dut.uo_out.value) >> 5) & 1\n        value = (value << 1) | scan_out
+        scan_out = (int(dut.uo_out.value) >> 5) & 1
+        value = (value << 1) | scan_out
         await RisingEdge(dut.clk)
         await Timer(1, units="ns")
     return value
