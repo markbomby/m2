@@ -67,7 +67,7 @@ async def scan_read(dut):
     value = 0
     for _ in range(6):
         drive(dut, select_dft=1, test_mode=1, scan_enable=1, scan_in=0)
-        value = (value << 1) | int(dut.uo_out.value[5])
+        scan_out = (int(dut.uo_out.value) >> 5) & 1\n        value = (value << 1) | scan_out
         await RisingEdge(dut.clk)
         await Timer(1, units="ns")
     return value
@@ -97,7 +97,7 @@ async def test_normal_mode_exhaustive(dut):
 async def test_scan_shift_control_and_capture(dut):
     cocotb.start_soon(Clock(dut.clk, 10, units="ns").start())
     await reset_dut(dut)
-    assert int(dut.uo_out.value[5]) == 0
+    assert ((int(dut.uo_out.value) >> 5) & 1) == 0
 
     cases = [
         (0x0, 0x0, 0, 0b101),
